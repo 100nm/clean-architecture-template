@@ -1,0 +1,9 @@
+name: Check Migrations
+description: Check if revision command with autogenerate has pending upgrade ops
+
+runs:
+  using: "composite"
+  steps:
+    - name: Alembic Check
+      shell: bash
+      run: uv run alembic check

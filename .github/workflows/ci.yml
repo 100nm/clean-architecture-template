@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      DB__NAME: ci_db
+
+    services:
+      database:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: ${{ env.DB__NAME }}
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Run checkout
+        uses: actions/checkout@v6
+
+      - name: Set up environment
+        uses: ./.github/actions/environment
+
+      - name: Check code style
+        uses: ./.github/actions/code-style
+
+      - name: Apply migrations
+        uses: ./.github/actions/apply-migrations
+
+      - name: Check migrations
+        uses: ./.github/actions/check-migrations
+
+      - name: Tests
+        uses: ./.github/actions/tests

@@ -1,0 +1,12 @@
+name: Environment
+description: Set up the environment
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install UV
+      uses: astral-sh/setup-uv@v7
+
+    - name: Install Dependencies
+      shell: bash
+      run: uv sync --frozen

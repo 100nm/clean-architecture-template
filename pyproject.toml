@@ -1,0 +1,55 @@
+[project]
+name = "clean-architecture-template"
+version = "0.0.0"
+description = ""
+readme = "README.md"
+requires-python = "==3.14.*"
+dependencies = [
+    "alembic",
+    "fastapi",
+    "httpx",
+    "orjson",
+    "pydantic",
+    "pydantic-settings",
+    "python-cq",
+    "python-injection[async]",
+    "python-multipart",
+    "sqlalchemy[postgresql-asyncpg]",
+    "typer",
+    "uvicorn",
+    "uvloop",
+]
+
+[dependency-groups]
+dev = [
+    "asgi-lifespan",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "ruff",
+]
+
+[tool.pytest]
+python_files = ["test_*.py"]
+addopts = ["--tb", "short", "--cov", "./", "--cov-report", "term-missing:skip-covered"]
+asyncio_default_fixture_loop_scope = "function"
+asyncio_mode = "auto"
+testpaths = ["./tests/"]
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint]
+extend-select = ["I", "N"]
+fixable = ["ALL"]
+
+[tool.uv]
+default-groups = ["dev"]
+package = false
