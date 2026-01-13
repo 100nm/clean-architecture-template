@@ -560,9 +560,8 @@ make makemigrations       # Generate a new migration
 
 # Code quality
 make lint                 # Ruff format + check
-make mypy                 # Type checking
 make pytest               # Run tests
-make                      # lint + mypy + pytest
+make                      # lint + pytest
 ```
 
 ---
