@@ -1,0 +1,9 @@
+name: Apply Migrations
+description: Apply all migrations
+
+runs:
+  using: "composite"
+  steps:
+    - name: Alembic Upgrade
+      shell: bash
+      run: uv run alembic upgrade head
