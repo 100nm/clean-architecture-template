@@ -5,4 +5,4 @@ from src.settings import Settings
 
 @test_constant
 def _settings_test_factory() -> Settings:
-    return Settings(_env_file=".env.test")  # type: ignore[reportCallIssue]
+    return Settings(profile=None, debug=True, _env_file=".env.test")
