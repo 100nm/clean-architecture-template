@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    depends_on:
+      - database
+    env_file:
+      - path: ./.env
+        required: false
+    environment:
+      DB__HOST: database
+    ports:
+      - "8000:8000"
+
+  database:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: ${DB__NAME}
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - database-storage:/var/lib/postgresql/data
+
+volumes:
+  database-storage:
