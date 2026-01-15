@@ -17,6 +17,7 @@ ENV PYTHONUNBUFFERED=1
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_NO_CACHE=1
 ENV UV_PYTHON_PREFERENCE="only-system"
+ENV UVICORN_HOST="0.0.0.0"
 
 # Update system dependencies
 RUN apt-get upgrade -y
@@ -31,5 +32,6 @@ RUN uv pip install -r requirements.txt --system
 RUN apt-get autoremove
 RUN apt-get clean
 
-ENTRYPOINT ["uvicorn", "main:app"]
-CMD ["--host", "0.0.0.0", "--loop", "uvloop"]
+EXPOSE ${UVICORN_PORT:-8000}
+
+ENTRYPOINT ["uvicorn", "main:app", "--loop", "uvloop"]
