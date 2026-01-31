@@ -1,14 +1,19 @@
 from collections.abc import AsyncIterator
 
-from injection import injectable, scoped
+from injection import scoped
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 
 from src.settings import Scope, Settings
 
 
-@injectable
-def _engine_factory(settings: Settings) -> AsyncEngine:
-    return create_async_engine(settings.db.get_url())
+@scoped(Scope.LIFESPAN)
+async def _engine_factory(settings: Settings) -> AsyncIterator[AsyncEngine]:
+    engine = create_async_engine(settings.db.get_url())
+
+    try:
+        yield engine
+    finally:
+        await engine.dispose()
 
 
 @scoped(Scope.REQUEST)
