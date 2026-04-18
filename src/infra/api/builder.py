@@ -5,7 +5,7 @@ from typing import AsyncContextManager, Self
 from fastapi import APIRouter, Depends, FastAPI, Request, Response, status
 from fastapi.exceptions import ValidationException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 from injection import adefine_scope, injectable
 from pydantic import ValidationError
 
@@ -39,7 +39,7 @@ class FastAPIBuilder:
 
         @app.exception_handler(ValidationError)
         async def _(request: Request, exception: ValidationError) -> Response:
-            return ORJSONResponse(
+            return JSONResponse(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 content={
                     "errors": exception.errors(
@@ -52,7 +52,7 @@ class FastAPIBuilder:
 
         @app.exception_handler(ValidationException)
         async def _(request: Request, exception: ValidationException) -> Response:
-            return ORJSONResponse(
+            return JSONResponse(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 content={"errors": exception.errors()},
             )
