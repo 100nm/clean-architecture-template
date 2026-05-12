@@ -7,6 +7,7 @@ requires-python = "==3.14.*"
 dependencies = [
     "alembic",
     "fastapi",
+    "granian[reload,uvloop]",
     "httpx",
     "pydantic",
     "pydantic-settings",
@@ -15,8 +16,6 @@ dependencies = [
     "python-multipart",
     "sqlalchemy[postgresql-asyncpg]",
     "typer",
-    "uvicorn",
-    "uvloop",
 ]
 
 [dependency-groups]

@@ -12,12 +12,14 @@ COPY ./pyproject.toml .
 COPY ./uv.lock .
 
 # Environment variables
+ENV GRANIAN_HOST="0.0.0.0"
+ENV GRANIAN_INTERFACE="asgi"
+ENV GRANIAN_LOOP="uvloop"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_NO_CACHE=1
 ENV UV_PYTHON_PREFERENCE="only-system"
-ENV UVICORN_HOST="0.0.0.0"
 
 # Update system dependencies
 RUN apt-get upgrade -y
@@ -32,6 +34,6 @@ RUN uv pip install -r requirements.txt --system
 RUN apt-get autoremove
 RUN apt-get clean
 
-EXPOSE ${UVICORN_PORT:-8000}
+EXPOSE ${GRANIAN_PORT:-8000}
 
-ENTRYPOINT ["uvicorn", "main:app", "--loop", "uvloop"]
+CMD ["granian", "main:app"]

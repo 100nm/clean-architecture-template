@@ -4,16 +4,16 @@ An opinionated Web API template with Python, built around Domain-Driven Design (
 
 ## Tech Stack
 
-| Category | Package                                                       | Role |
-|----------|---------------------------------------------------------------|------|
-| **Package Manager** | [uv](https://github.com/astral-sh/uv)                         | Dependency management |
-| **Web Framework** | [FastAPI](https://github.com/fastapi/fastapi)                 | REST API |
-| **CLI** | [Typer](https://github.com/fastapi/typer)                     | Command line interface |
-| **ORM** | [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy)        | Database access |
-| **Migration** | [Alembic](https://github.com/sqlalchemy/alembic)              | Schema migrations |
-| **Validation** | [Pydantic](https://github.com/pydantic/pydantic)              | Validation and serialization |
-| **DI** | [python-injection](https://github.com/100nm/python-injection) | Dependency injection |
-| **CQRS** | [python-cq](https://github.com/100nm/python-cq)               | Command/Query Responsibility Segregation |
+| Category            | Package                                                       | Role                                     |
+|---------------------|---------------------------------------------------------------|------------------------------------------|
+| **Package Manager** | [uv](https://github.com/astral-sh/uv)                         | Dependency management                    |
+| **Web Framework**   | [FastAPI](https://github.com/fastapi/fastapi)                 | REST API                                 |
+| **CLI**             | [Typer](https://github.com/fastapi/typer)                     | Command line interface                   |
+| **ORM**             | [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy)        | Database access                          |
+| **Migration**       | [Alembic](https://github.com/sqlalchemy/alembic)              | Schema migrations                        |
+| **Validation**      | [Pydantic](https://github.com/pydantic/pydantic)              | Validation and serialization             |
+| **DI**              | [python-injection](https://github.com/100nm/python-injection) | Dependency injection                     |
+| **CQRS**            | [python-cq](https://github.com/100nm/python-cq)               | Command/Query Responsibility Segregation |
 
 ---
 
@@ -33,7 +33,8 @@ src/
 
 ## Domain Layer (`src/core/{context}/domain/`)
 
-The **Domain** layer contains pure business models: entities, value objects, and aggregates. It has no dependencies on external frameworks. 
+The **Domain** layer contains pure business models: entities, value objects, and aggregates. It has no dependencies on
+external frameworks.
 
 ### Structure
 
@@ -46,17 +47,17 @@ src/core/{context}/domain/
 
 ### Packages
 
-| Package | Role | Justification |
-|---------|------|---------------|
+| Package    | Role          | Justification                                      |
+|------------|---------------|----------------------------------------------------|
 | `pydantic` | Domain models | Native validation, immutability with `frozen=True` |
 
 ### Path Patterns
 
-| Type | Path Pattern                                  | Description |
-|------|-----------------------------------------------|-------------|
-| **Aggregate** | `src/core/{context}/domain/{aggregate}.py`    | Entity that groups related objects and ensures they are always in a valid state together |
-| **Entity** | `src/core/{context}/domain/{entity}.py`       | Object with unique identity |
-| **Value Object** | `src/core/{context}/domain/{value_object}.py` | Immutable object without identity |
+| Type             | Path Pattern                                  | Description                                                                              |
+|------------------|-----------------------------------------------|------------------------------------------------------------------------------------------|
+| **Aggregate**    | `src/core/{context}/domain/{aggregate}.py`    | Entity that groups related objects and ensures they are always in a valid state together |
+| **Entity**       | `src/core/{context}/domain/{entity}.py`       | Object with unique identity                                                              |
+| **Value Object** | `src/core/{context}/domain/{value_object}.py` | Immutable object without identity                                                        |
 
 ### Example: Entity `UserSession`
 
@@ -78,7 +79,8 @@ class UserSession(BaseModel):
 
 ## Application Layer (`src/core/{context}/`)
 
-The **Application** layer contains use cases and orchestration logic: commands, queries, events, and ports. Everything in the bounded context folder except `domain/`.
+The **Application** layer contains use cases and orchestration logic: commands, queries, events, and ports. Everything
+in the bounded context folder except `domain/`.
 
 ### Structure
 
@@ -95,20 +97,20 @@ src/core/{context}/
 
 ### Packages
 
-| Package | Role | Justification                                |
-|---------|------|----------------------------------------------|
+| Package     | Role | Justification                                |
+|-------------|------|----------------------------------------------|
 | `python-cq` | CQRS | Command/Query separation, handler decoupling |
-| `pydantic` | DTOs | Command/Event/Query/View validation          |
+| `pydantic`  | DTOs | Command/Event/Query/View validation          |
 
 ### Path Patterns
 
-| Type | Path Pattern | Description |
-|------|--------------|-------------|
-| **Command** | `src/core/{context}/commands/{action}.py` | Action that modifies state |
-| **Query** | `src/core/{context}/queries/{query_name}.py` | Data reading (Query + View) |
-| **Event** | `src/core/{context}/events/{event}.py` | Domain event |
-| **Port (Repository)** | `src/core/{context}/ports/repo/{aggregate}.py` | Persistence interface |
-| **Port (Service)** | `src/core/{context}/ports/{service}.py` | External service interface |
+| Type                  | Path Pattern                                   | Description                 |
+|-----------------------|------------------------------------------------|-----------------------------|
+| **Command**           | `src/core/{context}/commands/{action}.py`      | Action that modifies state  |
+| **Query**             | `src/core/{context}/queries/{query_name}.py`   | Data reading (Query + View) |
+| **Event**             | `src/core/{context}/events/{event}.py`         | Domain event                |
+| **Port (Repository)** | `src/core/{context}/ports/repo/{aggregate}.py` | Persistence interface       |
+| **Port (Service)**    | `src/core/{context}/ports/{service}.py`        | External service interface  |
 
 ### Example: Command with Handler
 
@@ -192,7 +194,7 @@ class UserSessionRepository(Protocol):
         raise NotImplementedError
 
     @abstractmethod
-    async def get(self, session_id: UUID) -> UserSession | None: 
+    async def get(self, session_id: UUID) -> UserSession | None:
         raise NotImplementedError
 
     @abstractmethod
@@ -222,7 +224,8 @@ class PrivateUserProfileView(BaseModel):
 
 ## Shared Services (`src/services/`)
 
-The **Services** layer defines abstract interfaces for common technical services used across the entire application. These are cross-cutting concerns that can be used by any layer.
+The **Services** layer defines abstract interfaces for common technical services used across the entire application.
+These are cross-cutting concerns that can be used by any layer.
 
 ### Structure
 
@@ -234,10 +237,10 @@ src/services/{service_name}/
 
 ### Path Patterns
 
-| Type | Path Pattern | Description |
-|------|--------------|-------------|
-| **Service Interface** | `src/services/{service}/abc.py` | Abstract Protocol |
-| **Implementation** | `src/services/{service}/{impl}.py` | Concrete implementation |
+| Type                  | Path Pattern                       | Description             |
+|-----------------------|------------------------------------|-------------------------|
+| **Service Interface** | `src/services/{service}/abc.py`    | Abstract Protocol       |
+| **Implementation**    | `src/services/{service}/{impl}.py` | Concrete implementation |
 
 ### Example: Abstract Service `Hasher`
 
@@ -276,7 +279,7 @@ class Argon2Hasher(Hasher):
         return self.__internal.hash(value)
 
     def verify(self, value: str, hashed_value: str) -> bool:
-        try: 
+        try:
             return self.__internal.verify(hashed_value, value)
         except (InvalidHashError, VerificationError):
             return False
@@ -316,26 +319,26 @@ src/infra/
 
 ### Packages
 
-| Package | Role | Justification |
-|---------|------|---------------|
-| `fastapi` | API framework | Performance, native typing, auto OpenAPI |
-| `uvicorn` + `uvloop` | ASGI server | Optimal async performance |
-| `typer` | CLI | FastAPI-like API, autocompletion |
-| `sqlalchemy[postgresql-asyncpg]` | Async ORM | Native async PostgreSQL support |
-| `alembic` | Migrations | Standard for SQLAlchemy |
-| `python-injection` | DI | Declarative dependency injection |
+| Package                          | Role          | Justification                            |
+|----------------------------------|---------------|------------------------------------------|
+| `fastapi`                        | API framework | Performance, native typing, auto OpenAPI |
+| `granian` + `uvloop`             | ASGI server   | Optimal async performance                |
+| `typer`                          | CLI           | FastAPI-like API, autocompletion         |
+| `sqlalchemy[postgresql-asyncpg]` | Async ORM     | Native async PostgreSQL support          |
+| `alembic`                        | Migrations    | Standard for SQLAlchemy                  |
+| `python-injection`               | DI            | Declarative dependency injection         |
 
 ### Path Patterns
 
-| Type | Path Pattern                                         | Description |
-|------|------------------------------------------------------|-------------|
+| Type                   | Path Pattern                                         | Description                       |
+|------------------------|------------------------------------------------------|-----------------------------------|
 | **Adapter Repository** | `src/infra/adapters/{context}/repo/{aggregate}.py`   | SQLAlchemy implementation of Port |
-| **Adapter Service** | `src/infra/adapters/{context}/{service}.py`          | Service implementation |
-| **API Route** | `src/infra/api/routes/{route_set_name}.py`           | FastAPI endpoints |
-| **DB Table** | `src/infra/db/tables.py`                             | SQLAlchemy models |
-| **Query Handler** | `src/infra/query_handlers/{context}/{query_name}.py` | Read handler |
-| **CLI App** | `src/infra/cli/apps/{app_name}.py`                   | Typer commands |
-| **Integration** | `src/infra/integrations/{provider}/`                 | External provider specific code |
+| **Adapter Service**    | `src/infra/adapters/{context}/{service}.py`          | Service implementation            |
+| **API Route**          | `src/infra/api/routes/{route_set_name}.py`           | FastAPI endpoints                 |
+| **DB Table**           | `src/infra/db/tables.py`                             | SQLAlchemy models                 |
+| **Query Handler**      | `src/infra/query_handlers/{context}/{query_name}.py` | Read handler                      |
+| **CLI App**            | `src/infra/cli/apps/{app_name}.py`                   | Typer commands                    |
+| **Integration**        | `src/infra/integrations/{provider}/`                 | External provider specific code   |
 
 ### Example: Adapter Repository
 
@@ -378,7 +381,7 @@ class SQLAUserSessionRepository(UserSessionRepository):
         await self.session.merge(table)
 
     @classmethod
-    def to_table(cls, session: UserSession) -> UserSessionTable: 
+    def to_table(cls, session: UserSession) -> UserSessionTable:
         return UserSessionTable(
             id=session.id,
             user_id=session.user_id,
@@ -405,8 +408,8 @@ router = APIRouter(prefix="/users", tags=["User"])
 
 @router.get("/me")
 async def get_me(
-    claimant_id: Annotated[UUID, Depends(get_claimant_id)],
-    query_bus: Inject[QueryBus[PrivateUserProfileView | None]],
+        claimant_id: Annotated[UUID, Depends(get_claimant_id)],
+        query_bus: Inject[QueryBus[PrivateUserProfileView | None]],
 ) -> PrivateUserProfileView:
     query = GetPrivateUserProfileQuery(user_id=claimant_id)
     view = await query_bus.dispatch(query)
@@ -435,8 +438,8 @@ class GetPrivateUserProfileHandler(NamedTuple):
     session: AsyncSession
 
     async def handle(
-        self,
-        query: GetPrivateUserProfileQuery,
+            self,
+            query: GetPrivateUserProfileQuery,
     ) -> PrivateUserProfileView | None:
         stmt = select(
             UserTable.id,
@@ -469,7 +472,7 @@ from src.infra.api.routes import auth, registration, user
 from src.infra.cli.apps import db
 from src.infra.cli.builder import TyperBuilder
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     cli = (
         find_instance(TyperBuilder)
         .include_apps(
@@ -491,15 +494,18 @@ else:
     )
 ```
 
-When adding new routes or CLI commands: 
-- **New API router**: Add `from src.infra.api.routes import {module}` and include `{module}.router` in `include_routers()`
+When adding new routes or CLI commands:
+
+- **New API router**: Add `from src.infra.api.routes import {module}` and include `{module}.router` in
+  `include_routers()`
 - **New CLI app**: Add `from src.infra.cli.apps import {module}` and include `{module}.app` in `include_apps()`
 
 ---
 
 ## Testing (`tests/`)
 
-Test implementations should be placed in `tests/impl/`. This folder contains deterministic implementations that replace production services during tests, making unit tests predictable and fast.
+Test implementations should be placed in `tests/impl/`. This folder contains deterministic implementations that replace
+production services during tests, making unit tests predictable and fast.
 
 ### Structure
 
@@ -538,7 +544,8 @@ class SHA256Hasher(Hasher):
         return False
 ```
 
-The `@test_injectable(on=Hasher)` decorator registers this implementation only during test execution, replacing the production `Argon2Hasher`.
+The `@test_injectable(on=Hasher)` decorator registers this implementation only during test execution, replacing the
+production `Argon2Hasher`.
 
 ---
 
@@ -549,7 +556,7 @@ The `@test_injectable(on=Hasher)` decorator registers this implementation only d
 make install
 
 # Development
-make dev                  # Start uvicorn server in reload mode
+make dev                  # Start granian server in reload mode
 
 # Database
 make create-db            # Create the database

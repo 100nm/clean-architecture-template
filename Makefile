@@ -4,7 +4,7 @@ create-db:
 	uv run main.py db create
 
 dev:
-	uv run uvicorn main:app --loop uvloop --reload
+	uv run granian main:app --interface asgi --loop uvloop --reload
 
 drop-db:
 	uv run main.py db drop
