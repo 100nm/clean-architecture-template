@@ -10,7 +10,7 @@ from injection import adefine_scope, injectable
 from pydantic import ValidationError
 
 from src.infra.entrypoint import lifespan
-from src.settings import Scope, Settings
+from src.settings import DIScope, Settings
 
 
 @injectable
@@ -68,5 +68,5 @@ class FastAPIBuilder:
 
 
 async def _request_scope() -> AsyncIterator[None]:
-    async with adefine_scope(Scope.REQUEST):
+    async with adefine_scope(DIScope.REQUEST):
         yield

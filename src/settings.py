@@ -10,7 +10,7 @@ class Profile(StrEnum):
     ...
 
 
-class Scope(StrEnum):
+class DIScope(StrEnum):
     LIFESPAN = auto()
     REQUEST = auto()
 

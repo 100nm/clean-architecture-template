@@ -3,10 +3,10 @@ from collections.abc import AsyncIterator
 from injection import scoped
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 
-from src.settings import Scope, Settings
+from src.settings import DIScope, Settings
 
 
-@scoped(Scope.LIFESPAN)
+@scoped(DIScope.LIFESPAN)
 async def _engine_factory(settings: Settings) -> AsyncIterator[AsyncEngine]:
     engine = create_async_engine(settings.db.get_url())
 
@@ -16,7 +16,7 @@ async def _engine_factory(settings: Settings) -> AsyncIterator[AsyncEngine]:
         await engine.dispose()
 
 
-@scoped(Scope.REQUEST)
+@scoped(DIScope.REQUEST)
 async def _session_factory(engine: AsyncEngine) -> AsyncIterator[AsyncSession]:
     async with AsyncSession(engine) as session:
         async with session.begin():

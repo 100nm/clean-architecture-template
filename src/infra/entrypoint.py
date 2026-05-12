@@ -6,7 +6,7 @@ from injection import adefine_scope
 from injection.entrypoint import AsyncEntrypoint, Entrypoint, entrypointmaker
 from injection.loaders import load_packages, load_profile
 
-from src.settings import Profile, Scope, Settings
+from src.settings import DIScope, Profile, Settings
 
 
 @asynccontextmanager
@@ -19,7 +19,7 @@ async def lifespan(profile: Profile | None = None) -> AsyncIterator[None]:
     if profile is not None:
         load_profile(profile)
 
-    async with adefine_scope(Scope.LIFESPAN, kind="shared"):
+    async with adefine_scope(DIScope.LIFESPAN, kind="shared"):
         yield
 
 
@@ -30,7 +30,7 @@ def main[**P, T](
 ) -> Entrypoint[P, T]:
     return (
         entrypoint.inject()
-        .decorate(adefine_scope(Scope.REQUEST))
+        .decorate(adefine_scope(DIScope.REQUEST))
         .decorate(lifespan(settings.profile))
         .async_to_sync(uvloop.run)
     )
