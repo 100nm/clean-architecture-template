@@ -3,7 +3,7 @@ version: 2
 updates:
 - package-ecosystem: "uv"
   directory: "/"
-  target-branch: "dev"
+  target-branch: "main"
   schedule:
     interval: "weekly"
   groups:
