@@ -1,6 +1,7 @@
 from collections.abc import AsyncIterator
+from contextlib import AbstractAsyncContextManager
 from dataclasses import dataclass, field
-from typing import AsyncContextManager, Self
+from typing import Self
 
 from fastapi import APIRouter, Depends, FastAPI, Request, Response, status
 from fastapi.exceptions import ValidationException
@@ -63,7 +64,7 @@ class FastAPIBuilder:
         self.routers.extend(routers)
         return self
 
-    def _fastapi_lifespan(self, _app: FastAPI) -> AsyncContextManager[None]:
+    def _fastapi_lifespan(self, _app: FastAPI) -> AbstractAsyncContextManager[None]:
         return lifespan(self.settings.profile)
 
 

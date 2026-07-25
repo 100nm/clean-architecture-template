@@ -67,6 +67,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, SecretStr, field_serializer
 
+
 class UserSession(BaseModel):
     id: UUID
     user_id: UUID
@@ -132,8 +133,10 @@ from src.services.hasher.abc import Hasher
 from src.services.jwt.abc import JWTService
 from src.services.uuid.abc import UUIDGenerator
 
+
 class OpenUserSessionCommand(BaseModel):
     user_id: UUID
+
 
 class UserTokens(BaseModel):
     access_token: SecretStr
@@ -142,6 +145,7 @@ class UserTokens(BaseModel):
     @field_serializer("access_token", "session_token", when_used="json")
     def _dump_secret(self, value: SecretStr) -> str:
         return value.get_secret_value()
+
 
 @command_handler
 class OpenUserSessionHandler(NamedTuple):
@@ -188,6 +192,7 @@ from uuid import UUID
 
 from src.core.auth.domain.session import UserSession
 
+
 class UserSessionRepository(Protocol):
     @abstractmethod
     async def delete(self, session_id: UUID) -> None:
@@ -210,8 +215,10 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+
 class GetPrivateUserProfileQuery(BaseModel):
     user_id: UUID
+
 
 class PrivateUserProfileView(BaseModel):
     id: UUID
@@ -248,6 +255,7 @@ src/services/{service_name}/
 from abc import abstractmethod
 from typing import Protocol
 
+
 class Hasher(Protocol):
     @abstractmethod
     def hash(self, value: str) -> str:
@@ -270,6 +278,7 @@ from injection import injectable
 
 from src.services.hasher.abc import Hasher
 
+
 @injectable(on=Hasher)
 class Argon2Hasher(Hasher):
     def __init__(self) -> None:
@@ -281,7 +290,7 @@ class Argon2Hasher(Hasher):
     def verify(self, value: str, hashed_value: str) -> bool:
         try:
             return self.__internal.verify(hashed_value, value)
-        except (InvalidHashError, VerificationError):
+        except InvalidHashError, VerificationError:
             return False
 
     def needs_rehash(self, hashed_value: str) -> bool:
@@ -354,6 +363,7 @@ from src.core.auth.domain.session import UserSession
 from src.core.auth.ports.repo.user_session import UserSessionRepository
 from src.infra.db.tables import UserSessionTable
 
+
 @injectable(on=UserSessionRepository)
 @dataclass(frozen=True)
 class SQLAUserSessionRepository(UserSessionRepository):
@@ -401,15 +411,19 @@ from cq import QueryBus
 from fastapi import APIRouter, Depends, HTTPException, status
 from injection.ext.fastapi import Inject
 
-from src.core.user_profile.queries.private import GetPrivateUserProfileQuery, PrivateUserProfileView
+from src.core.user_profile.queries.private import (
+    GetPrivateUserProfileQuery,
+    PrivateUserProfileView,
+)
 from src.infra.api.dependencies import get_claimant_id
 
 router = APIRouter(prefix="/users", tags=["User"])
 
+
 @router.get("/me")
 async def get_me(
-        claimant_id: Annotated[UUID, Depends(get_claimant_id)],
-        query_bus: Inject[QueryBus[PrivateUserProfileView | None]],
+    claimant_id: Annotated[UUID, Depends(get_claimant_id)],
+    query_bus: Inject[QueryBus[PrivateUserProfileView | None]],
 ) -> PrivateUserProfileView:
     query = GetPrivateUserProfileQuery(user_id=claimant_id)
     view = await query_bus.dispatch(query)
@@ -429,17 +443,21 @@ from cq import query_handler
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.user_profile.queries.private import GetPrivateUserProfileQuery, PrivateUserProfileView
+from src.core.user_profile.queries.private import (
+    GetPrivateUserProfileQuery,
+    PrivateUserProfileView,
+)
 from src.infra.adapters.user_profile.repo.user_profile import UserStatus
 from src.infra.db.tables import UserTable
+
 
 @query_handler
 class GetPrivateUserProfileHandler(NamedTuple):
     session: AsyncSession
 
     async def handle(
-            self,
-            query: GetPrivateUserProfileQuery,
+        self,
+        query: GetPrivateUserProfileQuery,
     ) -> PrivateUserProfileView | None:
         stmt = select(
             UserTable.id,
@@ -529,6 +547,7 @@ from hashlib import sha256
 from injection.testing import test_injectable
 
 from src.services.hasher.abc import Hasher
+
 
 @test_injectable(on=Hasher)
 class SHA256Hasher(Hasher):

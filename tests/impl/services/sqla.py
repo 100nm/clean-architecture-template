@@ -8,9 +8,8 @@ from src.settings import DIScope
 
 @test_scoped(DIScope.LIFESPAN)
 async def _session_test_factory(engine: AsyncEngine) -> AsyncIterator[AsyncSession]:
-    async with AsyncSession(engine) as session:
-        async with session.begin() as transaction:
-            try:
-                yield session
-            finally:
-                await transaction.rollback()
+    async with AsyncSession(engine) as session, session.begin() as transaction:
+        try:
+            yield session
+        finally:
+            await transaction.rollback()
