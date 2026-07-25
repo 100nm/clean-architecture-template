@@ -18,6 +18,5 @@ async def _engine_factory(settings: Settings) -> AsyncIterator[AsyncEngine]:
 
 @scoped(DIScope.REQUEST)
 async def _session_factory(engine: AsyncEngine) -> AsyncIterator[AsyncSession]:
-    async with AsyncSession(engine) as session:
-        async with session.begin():
-            yield session
+    async with AsyncSession(engine) as session, session.begin():
+        yield session
