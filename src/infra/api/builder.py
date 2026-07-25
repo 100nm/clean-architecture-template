@@ -41,7 +41,7 @@ class FastAPIBuilder:
         @app.exception_handler(ValidationError)
         async def _(request: Request, exception: ValidationError) -> Response:
             return JSONResponse(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 content={
                     "errors": exception.errors(
                         include_url=False,
@@ -54,7 +54,7 @@ class FastAPIBuilder:
         @app.exception_handler(ValidationException)
         async def _(request: Request, exception: ValidationException) -> Response:
             return JSONResponse(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 content={"errors": exception.errors()},
             )
 

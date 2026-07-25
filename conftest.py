@@ -2,7 +2,7 @@ from collections.abc import AsyncIterator, Iterator
 
 import pytest
 from asgi_lifespan import LifespanManager
-from httpx import ASGITransport, AsyncClient
+from httpx2 import ASGITransport, AsyncClient
 from injection.loaders import load_packages
 from injection.testing import load_test_profile
 

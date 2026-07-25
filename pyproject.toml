@@ -8,7 +8,7 @@ dependencies = [
     "alembic",
     "fastapi",
     "granian[reload,uvloop]",
-    "httpx",
+    "httpx2",
     "pydantic",
     "pydantic-settings",
     "python-cq[injection]",
