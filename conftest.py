@@ -22,10 +22,10 @@ async def test_client() -> AsyncIterator[AsyncClient]:
     from main import app
 
     async with (
-        LifespanManager(app),
+        LifespanManager(app) as manager,
         AsyncClient(
             base_url="http://testserver",
-            transport=ASGITransport(app=app),
+            transport=ASGITransport(app=manager.app),
         ) as client,
     ):
         yield client
