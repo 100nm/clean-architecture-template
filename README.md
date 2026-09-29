@@ -59,17 +59,18 @@ src/core/{context}/domain/
 | **Entity**       | `src/core/{context}/domain/{entity}.py`       | Object with unique identity                                                              |
 | **Value Object** | `src/core/{context}/domain/{value_object}.py` | Immutable object without identity                                                        |
 
-### Example: Entity `UserSession`
+### Example: Aggregate `UserSession`
 
 ```python name=src/core/auth/domain/session.py
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, SecretStr, field_serializer
+from pydantic import SecretStr
+
+from src.domain_abc import AggregateRoot
 
 
-class UserSession(BaseModel):
-    id: UUID
+class UserSession(AggregateRoot[UUID]):
     user_id: UUID
     created_at: datetime
     last_use_at: datetime
