@@ -25,6 +25,7 @@ class FastAPIBuilder:
             debug=self.settings.debug,
             dependencies=[Depends(_request_scope)],
             lifespan=self._fastapi_lifespan,
+            version=str(self.settings.version),
         )
 
         for router in self.routers:
