@@ -7,7 +7,7 @@ from injection.loaders import load_packages
 from injection.testing import load_test_profile
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(autouse=True)
 def load_test_impl() -> Iterator[None]:
     from tests import impl
 
@@ -17,7 +17,7 @@ def load_test_impl() -> Iterator[None]:
         yield
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(autouse=True)
 async def test_client() -> AsyncIterator[AsyncClient]:
     from main import app
 
