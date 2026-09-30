@@ -21,7 +21,7 @@ target_metadata = Table.metadata
 
 
 @inject
-def run_migrations_offline(settings: Settings = NotImplemented) -> None:
+def run_migrations_offline(settings: Settings | None = None) -> None:
     """Run migrations in 'offline' mode.
 
     This configures the context with just a URL
@@ -33,6 +33,9 @@ def run_migrations_offline(settings: Settings = NotImplemented) -> None:
     script output.
 
     """
+    if settings is None:
+        raise NotImplementedError
+
     context.configure(
         url=settings.db.get_url(),
         target_metadata=target_metadata,
@@ -52,10 +55,13 @@ def do_run_migrations(connection: Connection) -> None:
 
 
 @main
-async def run_migrations_online(settings: Settings = NotImplemented) -> None:
+async def run_migrations_online(settings: Settings | None = None) -> None:
     """In this scenario we need to create an Engine
     and associate a connection with the context.
     """
+    if settings is None:
+        raise NotImplementedError
+
     connectable = create_async_engine(
         url=settings.db.get_url(),
         poolclass=pool.NullPool,

@@ -1,4 +1,4 @@
-before-commit: lint pytest
+before-commit: lint type-check pytest
 
 create-db:
 	uv run main.py db create
@@ -26,6 +26,9 @@ migrate:
 
 pytest:
 	uv run pytest
+
+type-check:
+	uv run ty check
 
 update:
 	uv lock --upgrade
