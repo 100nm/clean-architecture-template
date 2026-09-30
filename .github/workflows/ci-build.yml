@@ -1,0 +1,22 @@
+name: CI Build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  ci-build:
+    name: Build & Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Run checkout
+        uses: actions/checkout@v7
+
+      - name: Build Docker image
+        uses: ./.github/actions/build-docker-image
+        with:
+          image_name: ${{ github.event.repository.name }}
+          version: ${{ github.event.release.tag_name }}

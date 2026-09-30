@@ -1,4 +1,4 @@
-name: CI
+name: CI Checks
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  ci:
-    name: Continuous Integration
+  ci-checks:
+    name: Check Code
     runs-on: ubuntu-latest
     permissions:
       contents: read

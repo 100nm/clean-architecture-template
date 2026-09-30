@@ -1,0 +1,27 @@
+name: Build Docker Image
+description: Build Docker image
+
+inputs:
+  image_name:
+    description: "Name of the Docker image."
+    required: true
+  version:
+    description: "Version of the Docker image."
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build
+      shell: bash
+      run: docker build --build-arg VERSION=${{ inputs.version }} -t ${{ inputs.image_name }}:${{ inputs.version }} .
+
+    - name: Export
+      shell: bash
+      run: docker save ${{ inputs.image_name }}:${{ inputs.version }} | gzip > ${{ inputs.image_name }}-image-${{ inputs.version }}.tar.gz
+
+    - name: Upload
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: gh release upload "${{ inputs.version }}" "${{ inputs.image_name }}-image-${{ inputs.version }}.tar.gz" --clobber
