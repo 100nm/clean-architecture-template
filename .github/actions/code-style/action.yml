@@ -4,8 +4,12 @@ description: Check code style
 runs:
   using: "composite"
   steps:
-    - name: Ruff
+    - name: ruff
       shell: bash
       run: |
         uv run ruff format --check
         uv run ruff check
+
+    - name: ty
+      shell: bash
+      run: uv run ty check
