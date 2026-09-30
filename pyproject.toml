@@ -52,10 +52,10 @@ extend-select = ["ANN", "I", "N"]
 fixable = ["ALL"]
 
 [tool.ruff.lint.per-file-ignores]
-"**/tests/**" = ["ANN"]
+"{src/infra/db/migrations/**,**/tests/**}" = ["ANN"]
 
 [tool.ty.src]
-exclude = ["**/tests/"]
+exclude = ["src/infra/db/migrations/", "**/tests/"]
 
 [tool.uv]
 default-groups = ["dev"]
