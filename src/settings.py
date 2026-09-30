@@ -2,6 +2,7 @@ from enum import StrEnum, auto
 
 from injection import constant
 from pydantic import BaseModel, Field, Secret, SecretStr
+from pydantic_extra_types.semantic_version import SemanticVersion
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -37,6 +38,7 @@ class Settings(BaseSettings):
     allow_origins: tuple[str, ...] = Field(default=("*",))
     debug: bool = Field(default=False)
     db: _DatabaseSettings
+    version: SemanticVersion = Field(default=SemanticVersion.parse("0.0.0"))
 
     model_config = SettingsConfigDict(
         env_file=".env",
