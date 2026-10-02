@@ -67,7 +67,7 @@ from uuid import UUID
 
 from pydantic import SecretStr
 
-from src.domain_abc import AggregateRoot
+from src.seedwork.domain import AggregateRoot
 
 
 class UserSession(AggregateRoot[UUID]):
@@ -121,7 +121,7 @@ from typing import NamedTuple
 from uuid import UUID
 
 from cq import command_handler
-from pydantic import BaseModel, SecretStr, field_serializer
+from pydantic import SecretStr, field_serializer
 
 from src.core.auth.domain.session import UserSession
 from src.core.auth.ports.repo.user_permission import UserPermissionRepository
@@ -129,17 +129,18 @@ from src.core.auth.ports.repo.user_session import UserSessionRepository
 from src.core.auth.ports.token_generator import TokenGenerator
 from src.core.auth.shared.access_token import encode_access_token
 from src.core.auth.shared.session_token import encode_session_token
+from src.seedwork.app import DTO, Command
 from src.services.datetime.abc import DateTimeService
 from src.services.hasher.abc import Hasher
 from src.services.jwt.abc import JWTService
 from src.services.uuid.abc import UUIDGenerator
 
 
-class OpenUserSessionCommand(BaseModel):
+class OpenUserSessionCommand(Command):
     user_id: UUID
 
 
-class UserTokens(BaseModel):
+class UserTokens(DTO):
     access_token: SecretStr
     session_token: SecretStr
 
@@ -214,14 +215,14 @@ class UserSessionRepository(Protocol):
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel
+from src.seedwork.app import DTO, Query
 
 
-class GetPrivateUserProfileQuery(BaseModel):
+class GetPrivateUserProfileQuery(Query):
     user_id: UUID
 
 
-class PrivateUserProfileView(BaseModel):
+class PrivateUserProfileView(DTO):
     id: UUID
     created_at: datetime
     first_name: str
