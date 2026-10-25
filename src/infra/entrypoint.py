@@ -1,4 +1,4 @@
-from collections.abc import AsyncIterator
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import uvloop
@@ -10,7 +10,7 @@ from src.settings import DIScope, Profile, Settings
 
 
 @asynccontextmanager
-async def lifespan(profile: Profile | None = None) -> AsyncIterator[None]:
+async def lifespan(profile: Profile | None = None) -> AsyncGenerator[None]:
     from src import core, services
     from src.infra import adapters, query_handlers
 

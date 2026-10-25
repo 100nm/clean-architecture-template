@@ -3,6 +3,8 @@
 
 ### dotenv ###
 .env
+.env.*
+!.env.example
 
 ### macOS ###
 # General
