@@ -230,7 +230,8 @@ in the infrastructure (see [Query Handler](#example-query-handler)).
 from typing import NamedTuple
 from uuid import UUID
 
-from cq import RelatedEvents, command_handler
+from cq import RelatedEvents
+from cq.default import command_handler
 from pydantic import SecretStr, field_serializer
 
 from src.core.auth.domain.session import UserSession
@@ -327,7 +328,7 @@ class UserSessionOpenedEvent(Event):
 ```python name=src/core/security/events/auth/user_session_opened.py
 from typing import NamedTuple
 
-from cq import event_handler
+from cq.default import event_handler
 
 from src.core.auth.events.user_session_opened import UserSessionOpenedEvent
 from src.core.security.ports.new_session_notifier import NewSessionNotifier
@@ -704,7 +705,7 @@ tables as the commands, and build their view like repositories build domain obje
 ```python name=src/infra/query_handlers/user_profile/private.py
 from typing import NamedTuple
 
-from cq import query_handler
+from cq.default import query_handler
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
